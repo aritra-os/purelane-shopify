@@ -1,0 +1,68 @@
+.pl-combos-section { position: relative; z-index: 2; padding: var(--pl-sec-y) 0; }
+.pl-combos-outer { position: relative; display: block; margin-top: 8px; }
+
+.pl-comborail {
+  display: flex;
+  gap: 14px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  padding: 4px var(--pl-gutter) 16px;
+  max-width: var(--pl-maxw);
+  margin: 0 auto;
+}
+.pl-comborail::-webkit-scrollbar { display: none; }
+.pl-comborail:focus-visible { outline: 2px solid var(--pl-accent-aa); outline-offset: 4px; }
+
+.pl-combo {
+  flex: 0 0 280px;
+  scroll-snap-align: start;
+  background: var(--pl-g-bg);
+  border: 1px solid var(--pl-g-line);
+  border-radius: var(--pl-r);
+  box-shadow: var(--pl-g-shadow);
+  overflow: hidden;
+}
+.pl-combo__tray {
+  padding: 14px 14px 0;
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.pl-combo__save {
+  font-size: 9.5px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase;
+  padding: 5px 10px; border-radius: var(--pl-r-pill);
+  background: rgba(255,255,255,.84); border: 1px solid rgba(201,118,29,.34); color: var(--pl-leaf);
+}
+.pl-combo__flag {
+  font-size: 8.6px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase;
+  padding: 4px 9px; border-radius: var(--pl-r-pill);
+  background: linear-gradient(135deg, var(--pl-flag-a), var(--pl-flag-b)); color: #f4fdf6;
+}
+.pl-combo__body { padding: 15px 16px 18px; }
+.pl-combo__title {
+  font-family: var(--pl-font-display); font-size: 16px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .01em; color: var(--pl-surface); margin-bottom: 6px;
+}
+.pl-combo__inc { font-size: 12.4px; color: var(--pl-paper-2); line-height: 1.55; margin-bottom: 14px; }
+.pl-combo__price { display: flex; align-items: baseline; gap: 9px; margin-bottom: 12px; }
+.pl-combo__price strong { font-family: var(--pl-font-display); font-size: 25px; font-weight: 800; color: var(--pl-surface); }
+.pl-combo__price s { font-size: 13px; color: var(--pl-paper-3-aa); }
+.pl-combo form { margin: 0; }
+.pl-combo .pl-btn { width: 100%; }
+
+.pl-rail-controls { display: flex; gap: 8px; justify-content: center; margin-top: 4px; }
+.pl-rail-btn {
+  width: 36px; height: 36px; border-radius: 999px;
+  border: 1px solid var(--pl-g-line); background: var(--pl-g-bg); color: var(--pl-surface);
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+}
+.pl-rail-btn:hover { background: rgba(75,58,143,.06); }
+
+@media (min-width: 1024px) {
+  .pl-comborail {
+    justify-content: center;
+  }
+}

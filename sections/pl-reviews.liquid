@@ -1,0 +1,89 @@
+{{ 'pl-reviews.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'pl-reviews.js' | asset_url }}" defer="defer"></script>
+
+{%- comment -%}
+  Marquee rail. The track is rendered TWICE — once as real content, once as
+  an aria-hidden + inert visual clone — because a CSS translateX(-50%) loop
+  only looks seamless if the content repeats exactly. Screen readers only
+  get the first copy. A visible pause button is included because the
+  original relied on :hover/:focus-within, but nothing inside a review card
+  is focusable, so keyboard users had no way to stop the motion (WCAG 2.2.2).
+{%- endcomment -%}
+
+<div class="pl-reviews-section" data-scene="{{ section.settings.scene }}">
+  <div class="pl-wrap">
+    <div class="pl-panel-head">
+      {%- if section.settings.kicker != blank -%}
+        <span class="pl-kicker">{{ section.settings.kicker }}</span>
+      {%- endif -%}
+      <h2 class="pl-visually-hidden">Customer reviews</h2>
+      {%- if section.settings.agg_rating != blank -%}
+        <p class="pl-reviews-agg">
+          <span aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+          <b>{{ section.settings.agg_rating }}</b> from {{ section.settings.agg_count }}
+        </p>
+      {%- endif -%}
+    </div>
+  </div>
+
+  <pl-marquee class="pl-revrail">
+    <div class="pl-revtrack">
+      {%- for block in section.blocks -%}
+        {% render 'pl-review-card', block: block %}
+      {%- endfor -%}
+    </div>
+    <div class="pl-revtrack pl-revtrack--clone" aria-hidden="true" inert>
+      {%- for block in section.blocks -%}
+        {% render 'pl-review-card', block: block %}
+      {%- endfor -%}
+    </div>
+
+    <button type="button" class="pl-rev-pause" data-pause aria-pressed="false">
+      <span class="pl-visually-hidden">Pause reviews</span>
+      <svg class="pl-icon-play" viewBox="0 0 24 24" fill="currentColor" width="14" height="14" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+      <svg class="pl-icon-pause" viewBox="0 0 24 24" fill="currentColor" width="14" height="14" aria-hidden="true"><path d="M6 5h4v14H6zm8 0h4v14h-4z"/></svg>
+    </button>
+  </pl-marquee>
+</div>
+
+{% schema %}
+{
+  "name": "Purelane · Reviews",
+  "tag": "section",
+  "class": "pl-section",
+  "settings": [
+    { "type": "header", "content": "Content" },
+    { "type": "text", "id": "kicker", "label": "Kicker", "default": "That's what they said" },
+    { "type": "text", "id": "agg_rating", "label": "Aggregate rating", "default": "4.8" },
+    { "type": "text", "id": "agg_count", "label": "Review count label", "default": "8,000+ reviews" },
+
+    { "type": "header", "content": "Advanced" },
+    { "type": "range", "id": "scene", "label": "Background scene", "min": 1, "max": 4, "step": 1, "default": 1 }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Review",
+      "settings": [
+        { "type": "range", "id": "rating", "label": "Stars", "min": 1, "max": 5, "step": 1, "default": 5 },
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Works like a charm" },
+        { "type": "textarea", "id": "body", "label": "Review text" },
+        { "type": "text", "id": "author", "label": "Author", "default": "Verified buyer" },
+        { "type": "product", "id": "product", "label": "Product reviewed" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Purelane · Reviews",
+      "blocks": [
+        { "type": "review" },
+        { "type": "review" },
+        { "type": "review" },
+        { "type": "review" },
+        { "type": "review" }
+      ]
+    }
+  ]
+}
+{% endschema %}

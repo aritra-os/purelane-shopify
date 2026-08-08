@@ -1,0 +1,112 @@
+{{ 'pl-card.css' | asset_url | stylesheet_tag }}
+{{ 'pl-shop.css' | asset_url | stylesheet_tag }}
+{{ 'pl-combos.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'pl-combos.js' | asset_url }}" defer="defer"></script>
+
+{%- comment -%}
+  Combo rail. Block-based with a product reference, same tradeoff as
+  Bundles — see build notes. The scrollbar is hidden for visual polish but
+  the rail is reachable and operable by keyboard (tabindex + arrow-key
+  scroll via pl-rail.js, plus visible prev/next buttons), which the
+  original lacked entirely.
+{%- endcomment -%}
+
+<div class="pl-combos-section" data-scene="{{ section.settings.scene }}">
+  <div class="pl-wrap">
+    <div class="pl-panel-head">
+      {%- if section.settings.kicker != blank -%}
+        <span class="pl-kicker">{{ section.settings.kicker }}</span>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="pl-heading-2">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+    </div>
+  </div>
+
+  <pl-rail class="pl-combos-outer">
+    <div class="pl-comborail" tabindex="0" role="region" aria-label="Combo packs, scrollable">
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign cp = block.settings.combo_product
+          assign benefits = block.settings.benefits | newline_to_br | split: '<br />'
+        -%}
+        <article class="pl-combo" {{ block.shopify_attributes }}>
+          <div class="pl-combo__tray">
+            {%- if cp != blank and cp.compare_at_price > cp.price -%}
+              {%- assign saved = cp.compare_at_price | minus: cp.price -%}
+              <span class="pl-combo__save">You save {{ saved | money }}</span>
+            {%- endif -%}
+            {%- if block.settings.flag != blank -%}
+              <span class="pl-combo__flag">{{ block.settings.flag }}</span>
+            {%- endif -%}
+          </div>
+          <div class="pl-combo__body">
+            <h3 class="pl-combo__title">{{ block.settings.title }}</h3>
+            {%- if benefits.size > 0 -%}
+              <p class="pl-combo__inc">
+                {%- for b in benefits -%}{%- if b != blank -%}{{ b }}{% unless forloop.last %} + {% endunless %}{%- endif -%}{%- endfor -%}
+              </p>
+            {%- endif -%}
+            {%- if cp != blank -%}
+              <div class="pl-combo__price">
+                <strong>{{ cp.price | money }}</strong>
+                {%- if cp.compare_at_price > cp.price %}<s>{{ cp.compare_at_price | money }}</s>{% endif -%}
+              </div>
+              {%- form 'product', cp -%}
+                <input type="hidden" name="id" value="{{ cp.selected_or_first_available_variant.id }}">
+                <button type="submit" class="pl-btn pl-btn--ghost">Shop bundle</button>
+              {%- endform -%}
+            {%- endif -%}
+          </div>
+        </article>
+      {%- endfor -%}
+    </div>
+
+    <div class="pl-rail-controls">
+      <button type="button" class="pl-rail-btn" data-rail-prev aria-label="Scroll combos left">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M19 12H6m6-6-6 6 6 6"/></svg>
+      </button>
+      <button type="button" class="pl-rail-btn" data-rail-next aria-label="Scroll combos right">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M5 12h13m-5-6 6 6-6 6"/></svg>
+      </button>
+    </div>
+  </pl-rail>
+</div>
+
+{% schema %}
+{
+  "name": "Purelane · Combos",
+  "tag": "section",
+  "class": "pl-section",
+  "settings": [
+    { "type": "header", "content": "Content" },
+    { "type": "text", "id": "kicker", "label": "Kicker", "default": "Pre-built to save you money" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Best selling combos" },
+
+    { "type": "header", "content": "Advanced" },
+    { "type": "range", "id": "scene", "label": "Background scene", "min": 1, "max": 4, "step": 1, "default": 3 }
+  ],
+  "blocks": [
+    {
+      "type": "combo",
+      "name": "Combo",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title", "default": "Kitchen essentials" },
+        { "type": "text", "id": "flag", "label": "Flag", "info": "e.g. 'Most popular'. Leave blank for none." },
+        { "type": "product", "id": "combo_product", "label": "Product this combo prices from" },
+        { "type": "textarea", "id": "benefits", "label": "Benefit lines", "info": "One per line", "default": "Cuts grease instantly\nSqueaky clean dishes" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Purelane · Combos",
+      "blocks": [
+        { "type": "combo" },
+        { "type": "combo", "settings": { "title": "Laundry care bundle" } },
+        { "type": "combo", "settings": { "title": "Complete home bundle" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

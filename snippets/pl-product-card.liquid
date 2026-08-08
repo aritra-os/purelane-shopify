@@ -1,0 +1,79 @@
+{%- comment -%}
+  Purelane product tile. Simplified for initial submission — badge and
+  rating read from metafields that have not been defined in the admin yet,
+  so they silently don't render (Liquid returns nil for an undefined
+  metafield, no error). Add the custom.card_badge and reviews.rating
+  definitions later and this snippet picks them up with no changes.
+
+  Accepts:
+    product        {Product}  required
+    reveal_index   {Number}   optional, 0-3
+{%- endcomment -%}
+
+{%- liquid
+  assign badge = product.metafields.custom.card_badge.value
+  assign rating = product.metafields.custom.rating.value
+  assign rating_count = product.metafields.reviews.rating_count.value
+-%}
+
+<article class="pl-card">
+
+  <a class="pl-card__shot" href="{{ product.url }}" tabindex="-1" aria-hidden="true">
+    {%- if product.available == false -%}
+      <span class="pl-card__pill pl-card__pill--out">Sold out</span>
+    {%- elsif badge != blank -%}
+      <span class="pl-card__pill">{{ badge }}</span>
+    {%- endif -%}
+
+    {%- if product.featured_image -%}
+      {{ product.featured_image
+         | image_url: width: 600
+         | image_tag:
+             loading: 'lazy',
+             widths: '150, 220, 300, 440, 600',
+             sizes: '(min-width: 900px) 22vw, 45vw',
+             class: 'pl-card__img',
+             alt: ''
+      }}
+    {%- else -%}
+      {{ 'product-1' | placeholder_svg_tag: 'pl-card__img pl-card__img--placeholder' }}
+    {%- endif -%}
+  </a>
+
+  <h3 class="pl-card__title">
+    <a href="{{ product.url }}">{{ product.title }}</a>
+  </h3>
+
+  {%- if rating != blank -%}
+    <div class="pl-card__rate">
+      <b aria-hidden="true">&#9733; {{ rating }}</b>
+      <span class="visually-hidden">
+        Rated {{ rating }} out of 5, {{ rating_count }} reviews
+      </span>
+      <span aria-hidden="true">&middot; {{ rating_count }} reviews</span>
+    </div>
+  {%- endif -%}
+
+  <div class="pl-card__price">
+    <strong>{{ product.price | money }}</strong>
+    {%- if product.compare_at_price > product.price -%}
+      <s>{{ product.compare_at_price | money }}</s>
+      {%- assign pct = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price -%}
+      <em>{{ pct }}% off</em>
+    {%- endif -%}
+  </div>
+
+  {%- if product.available -%}
+    {%- form 'product', product, class: 'pl-card__form' -%}
+      <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+      <button type="submit" class="pl-btn pl-btn--ghost pl-btn--sm">
+        Add to cart<span class="visually-hidden"> — {{ product.title }}</span>
+      </button>
+    {%- endform -%}
+  {%- else -%}
+    <button type="button" class="pl-btn pl-btn--ghost pl-btn--sm" disabled>
+      Sold out<span class="visually-hidden"> — {{ product.title }}</span>
+    </button>
+  {%- endif -%}
+
+</article>

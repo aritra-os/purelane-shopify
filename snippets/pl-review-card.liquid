@@ -1,0 +1,23 @@
+{%- comment -%}
+  Single review card. Rendered twice by the parent section (real + clone
+  for the marquee loop) — takes `block` so both passes read identical data.
+{%- endcomment -%}
+
+<article class="pl-rcard">
+  <div class="pl-rcard__stars" aria-hidden="true">
+    {%- for i in (1..5) -%}
+      {%- if i <= block.settings.rating -%}&#9733;{%- else -%}&#9734;{%- endif -%}
+    {%- endfor -%}
+  </div>
+  <h3 class="pl-rcard__heading">{{ block.settings.heading }}</h3>
+  {%- if block.settings.body != blank -%}
+    <p class="pl-rcard__body">{{ block.settings.body }}</p>
+  {%- endif -%}
+  <div class="pl-rcard__who">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" width="12" height="12" aria-hidden="true"><path d="m5 13 4 4L19 7"/></svg>
+    <b>{{ block.settings.author }}</b>
+    {%- if block.settings.product != blank -%}
+      <span>&middot; {{ block.settings.product.title }}</span>
+    {%- endif -%}
+  </div>
+</article>

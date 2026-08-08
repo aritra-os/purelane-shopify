@@ -20,6 +20,12 @@
     {% # Load and preload the critical CSS %}
     {{ 'critical.css' | asset_url | stylesheet_tag: preload: true }}
 
+    {% # Purelane design tokens %}
+    {{ 'pl-tokens.css' | asset_url | stylesheet_tag }}
+    {{ 'pl-fonts.css' | asset_url | stylesheet_tag }}
+    {{ 'pl-scenes.css' | asset_url | stylesheet_tag }}
+    <script src="{{ 'pl-scenes.js' | asset_url }}" defer="defer"></script>
+
     {% # Social, title, etc. %}
     {% render 'meta-tags' %}
 
@@ -27,6 +33,8 @@
   </head>
 
   <body>
+    {% render 'pl-scenes' %}
+
     {% sections 'header-group' %}
 
     {{ content_for_layout }}

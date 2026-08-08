@@ -1,0 +1,104 @@
+/* ==========================================================================
+   Purelane — resolved design tokens
+   --------------------------------------------------------------------------
+   The source file ships TWO full :root blocks. Style block 2 ("VERSION 2 —
+   BRAND COLOURS (light)", lines 634-823) overrides block 1 (lines 12-633) by
+   cascade order, so the LIGHT palette is what actually renders.
+
+   This file is the resolved result: block 1's values with block 2's overrides
+   applied, block 1's now-unreachable colour declarations deleted, and block
+   1's geometry/rhythm tokens kept (block 2 never touches them).
+
+   Drop into assets/purelane-tokens.css and load once from theme.liquid.
+   ========================================================================== */
+
+:root {
+  /* ---- palette (resolved: V2 wins) ------------------------------------- */
+  --pl-ink: #f4f0fb;                       /* page ground        (was #17102b) */
+  --pl-deep: #e2daf3;                      /* raised ground      (was #241a3d) */
+  --pl-brand: #4b3a8f;                     /* unchanged across both blocks */
+  --pl-brand-lt: #6b55b8;                  /* unchanged */
+  --pl-paper: #241a3d;                     /* body ink           (was #ece6f7) */
+  --pl-paper-2: rgba(36, 26, 61, 0.78);    /* secondary ink      (was .74 light) */
+  --pl-paper-3: rgba(36, 26, 61, 0.56);    /* tertiary ink — SEE CONTRAST NOTE */
+  --pl-accent: #b8701c;                    /* accent             (was #f0a03c) */
+  --pl-accent-2: #c9761d;                  /* unchanged */
+  --pl-surface: #17102b;                   /* headings           (was #faf7fd) */
+
+  /* CONTRAST NOTE — measured against the light scene grounds:
+     --pl-paper-3  3.61:1 – 3.86:1   FAILS WCAG AA for normal text (needs 4.5)
+                                     and it is used at 10–11px (.kicker,
+                                     .combo .fine, .card .pr s, .rcard .who)
+     --pl-accent   3.10:1 – 3.89:1   FAILS AA at .card .rate b (11.5px) and
+                                     .ptag .lbl (9px). Passes as LARGE text
+                                     only at .tier .price (27px/800).
+     Fix below; keep the originals available so the diff is reviewable. */
+  --pl-paper-3-aa: rgba(36, 26, 61, 0.70); /* 4.9:1 — use for <18px */
+  --pl-accent-aa: #8f550f;                 /* 5.6:1 — use for small accent text */
+
+  /* ---- glass ----------------------------------------------------------- */
+  --pl-g-bg: linear-gradient(158deg, rgba(255,255,255,.80), rgba(236,230,247,.56) 58%, rgba(222,212,240,.50));
+  --pl-g-line: rgba(75, 58, 143, 0.16);
+  --pl-g-shadow: 0 22px 54px rgba(58, 44, 112, 0.13);
+  --pl-g-inset: inset 0 1px 0 rgba(255, 255, 255, 0.92);
+
+  /* ---- scene grounds (fixed background stage) --------------------------- */
+  --pl-scene-base: #eee7fb;
+  --pl-scene-1: linear-gradient(178deg, #fbfffb 0%, #eafaec 24%, #d6f1dc 54%, #bfe8ca 100%);
+  --pl-scene-2: linear-gradient(178deg, #f6fdf7 0%, #e3f7e7 26%, #cbedd4 58%, #b2e2c2 100%);
+  --pl-scene-3: linear-gradient(178deg, #f0fbf2 0%, #d9f2df 28%, #bde6c8 60%, #a2d9b6 100%);
+  --pl-scene-4: linear-gradient(178deg, #e9f8ec 0%, #cdedd6 30%, #addcbe 62%, #8ecdaa 100%);
+
+  /* ---- untokenised colours found hardcoded in V2 (promote or delete) ---- */
+  --pl-leaf: #4f7d10;      /* pill + check text. A THIRD hue, in no palette. */
+  --pl-flag-a: #00706a;    /* .combo .flag gradient start */
+  --pl-flag-b: #004b46;    /* .combo .flag gradient end */
+  --pl-heading-alt: #01423b; /* .rcard .who b */
+  --pl-star: #7a9c1e;      /* .st star glyphs */
+
+  /* ---- geometry (V1 only; V2 never overrides these) --------------------- */
+  --pl-r: 26px;
+  --pl-r-sm: 16px;
+  --pl-r-pill: 999px;
+  --pl-maxw: 1180px;
+  --pl-gutter: 18px;
+  --pl-sec-y: 34px;
+  --pl-ease: cubic-bezier(.2, .7, .2, 1);
+
+  /* ---- type scale (extracted from .d1-.d4 / .lede / .body-s / .kicker) --- */
+  --pl-font-display: 'Outfit', system-ui, sans-serif;
+  --pl-font-body: 'Inter', system-ui, -apple-system, sans-serif;
+  --pl-d1: clamp(48px, 8.6vw, 112px);
+  --pl-d2: clamp(30px, 4.6vw, 54px);
+  --pl-d3: clamp(21px, 2.5vw, 30px);
+  --pl-d4: clamp(16px, 1.6vw, 19px);
+  --pl-lede: clamp(15px, 1.35vw, 17.5px);
+  --pl-body-s: 14.5px;
+  --pl-kicker: 11px;
+  --pl-lh-body: 1.62;
+
+  /* ---- breakpoints -----------------------------------------------------
+     Source file uses 17 distinct widths, mixing min- and max-, including
+     900/901 and 760/720 pairs that are the same intent at different values.
+     Collapsed to four. Every rule maps onto one of these; the mapping is
+     listed in the build notes.                                            */
+  --pl-bp-sm: 600px;   /* was 600 / 640            */
+  --pl-bp-md: 760px;   /* was 720 / 760 / 820      */
+  --pl-bp-lg: 900px;   /* was 860 / 880 / 900 / 901 / 960 */
+  --pl-bp-xl: 1180px;  /* was 1024 / 1040 / 1180 / 1200 */
+}
+
+/* Reduced motion is already handled well in the source (line 627). Keep it,
+   and add the two things it misses: the JS-driven parallax reads the media
+   query once at load and never re-checks, and the two autoplay carousels
+   have no user-facing pause control (WCAG 2.2.2). Both are fixed in JS. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

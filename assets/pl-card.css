@@ -1,0 +1,103 @@
+/* ==========================================================================
+   Purelane — product card. Self-contained: includes minimal button styles
+   so it doesn't depend on a global base stylesheet that hasn't been built
+   yet. Uses tokens from pl-tokens.css only.
+   ========================================================================== */
+
+.pl-card {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  background: var(--pl-g-bg);
+  border: 1px solid var(--pl-g-line);
+  border-radius: var(--pl-r);
+  box-shadow: var(--pl-g-shadow);
+}
+
+.pl-card__shot {
+  height: 150px;
+  border-radius: 14px;
+  margin-bottom: 14px;
+  display: grid;
+  place-items: center;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(160deg, rgba(255,255,255,.60), rgba(236,230,247,.42));
+}
+.pl-card__img { max-height: 122px; width: auto; object-fit: contain; }
+.pl-card__img--placeholder { max-height: 100px; opacity: .5; }
+
+.pl-card__title {
+  font-family: var(--pl-font-display);
+  font-size: 13.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .03em;
+  line-height: 1.2;
+  color: var(--pl-surface);
+  margin-bottom: 7px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: calc(1.2em * 2);
+}
+.pl-card__title a { text-decoration: none; color: inherit; }
+
+.pl-card__rate { font-size: 11.5px; color: var(--pl-paper-2); margin-bottom: 10px; display: flex; gap: 5px; }
+.pl-card__rate b { color: var(--pl-accent-aa); font-weight: 700; }
+
+.pl-card__price { margin-top: auto; display: flex; align-items: baseline; gap: 8px; margin-bottom: 12px; }
+.pl-card__price strong { font-family: var(--pl-font-display); font-size: 18px; font-weight: 700; color: var(--pl-surface); }
+.pl-card__price s  { font-size: 12px; color: var(--pl-paper-3-aa); }
+.pl-card__price em { font-style: normal; font-size: 10px; font-weight: 800; letter-spacing: .08em; color: var(--pl-accent-aa); }
+
+.pl-card__pill {
+  position: absolute;
+  top: 9px;
+  left: 9px;
+  font-size: 8.5px;
+  font-weight: 800;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  padding: 4px 9px;
+  border-radius: var(--pl-r-pill);
+  background: rgba(255,255,255,.86);
+  border: 1px solid rgba(201,118,29,.34);
+  color: var(--pl-leaf);
+}
+.pl-card__pill--out { color: var(--pl-paper); border-color: var(--pl-g-line); }
+
+.pl-card__form { margin: 0; }
+
+/* minimal button system — enough for this card, not a full design system */
+.pl-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-family: var(--pl-font-body);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid var(--pl-g-line);
+  background: transparent;
+  color: var(--pl-surface);
+  transition: background .2s var(--pl-ease);
+}
+.pl-btn--ghost:hover { background: rgba(75,58,143,.06); }
+.pl-btn[disabled] { opacity: .55; cursor: not-allowed; }
+.pl-btn--sm { padding: 8px 14px; font-size: 12.5px; }
+
+.visually-hidden {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}

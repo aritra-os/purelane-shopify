@@ -1,0 +1,38 @@
+.pl-bundles-section { position: relative; z-index: 2; padding: var(--pl-sec-y) 0; }
+.pl-lede { max-width: 44ch; margin: 14px auto 0; text-align: center; color: var(--pl-paper-2); font-size: var(--pl-lede); }
+
+.pl-tiers { display: grid; gap: 14px; grid-template-columns: 1fr; }
+@media (min-width: 760px) { .pl-tiers { grid-template-columns: repeat(3, 1fr); } }
+
+.pl-tier {
+  padding: 24px 22px;
+  background: var(--pl-g-bg);
+  border: 1px solid var(--pl-g-line);
+  border-radius: var(--pl-r);
+  box-shadow: var(--pl-g-shadow);
+  text-align: left;
+}
+.pl-tier--best { border-color: rgba(184,112,28,.44); box-shadow: 0 26px 74px rgba(18,12,34,.18), 0 0 0 1px rgba(184,112,28,.2); }
+
+.pl-tier__tag {
+  display: inline-block; font-size: 9.5px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase;
+  padding: 5px 11px; border-radius: var(--pl-r-pill); margin-bottom: 14px;
+  background: rgba(201,118,29,.14); border: 1px solid rgba(201,118,29,.34); color: var(--pl-leaf);
+}
+.pl-tier__pix { height: 78px; display: flex; align-items: flex-end; margin: -4px 0 16px; }
+.pl-tier__pix-img { max-height: 62px; width: auto; margin: 0 auto; }
+
+.pl-tier__qty { font-family: var(--pl-font-display); font-weight: 800; font-size: 44px; line-height: .9; color: var(--pl-surface); }
+.pl-tier__qty small { font-size: 12px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--pl-paper-3-aa); display: block; margin-top: 6px; }
+
+.pl-tier__price { font-family: var(--pl-font-display); font-weight: 700; font-size: 25px; color: var(--pl-accent-aa); margin: 14px 0 4px; }
+.pl-tier__price s { font-size: 13px; color: var(--pl-paper-3-aa); font-weight: 500; margin-left: 8px; }
+.pl-tier__per { font-size: 11px; color: var(--pl-paper-3-aa); }
+
+.pl-tier__features { list-style: none; margin: 14px 0 18px; display: grid; gap: 8px; padding: 0; }
+.pl-tier__features li { display: flex; gap: 8px; font-size: 13px; color: var(--pl-paper-2); align-items: flex-start; }
+.pl-tier__features svg { color: var(--pl-accent-aa); flex: 0 0 auto; margin-top: 3px; }
+
+.pl-tier form { margin: 0; }
+.pl-btn--primary { background: var(--pl-accent-aa); color: #fff; border-color: var(--pl-accent-aa); }
+.pl-btn--primary:hover { opacity: .92; }

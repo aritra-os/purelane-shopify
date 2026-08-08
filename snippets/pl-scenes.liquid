@@ -1,0 +1,67 @@
+{%- comment -%}
+  Global fixed background stage. Render ONCE from layout/theme.liquid,
+  immediately after <body>. Every section talks to this via a
+  data-scene="1".."4" attribute — see pl-scenes.js for how that's read.
+
+  The four .pl-water layers are the original inline <svg> water-noise
+  graphics, extracted to standalone asset files and loaded as <img> instead
+  of inlined. Two reasons:
+    1. 21 KB of inline SVG path data no longer bloats every single page
+       render — it's now a cacheable, separately-fetched image.
+    2. The original inlined the same gradient/filter ids (cg, wf, wf2) in
+       two different layers, which collide in one shared document. As
+       separate <img> loads, each SVG is its own isolated document, so the
+       id collision is structurally impossible now.
+{%- endcomment -%}
+
+<pl-scenes class="pl-scenes" data-depth="1" aria-hidden="true">
+  <div class="pl-scene pl-scene--1 is-on"></div>
+  <div class="pl-scene pl-scene--2"></div>
+  <div class="pl-scene pl-scene--3"></div>
+  <div class="pl-scene pl-scene--4"></div>
+
+  <div class="pl-water" id="pl-water">
+    <div class="pl-wl pl-wl--a">
+      <img class="pl-wl__img" src="{{ 'pl-water-a.svg' | asset_url }}" alt="" loading="eager" width="1800" height="1100">
+    </div>
+    <div class="pl-wl pl-wl--b">
+      <img class="pl-wl__img" src="{{ 'pl-water-b.svg' | asset_url }}" alt="" loading="eager" width="1800" height="1100">
+    </div>
+    <div class="pl-wl pl-wl--c">
+      <img class="pl-wl__img" src="{{ 'pl-water-c.svg' | asset_url }}" alt="" loading="eager" width="1800" height="1100">
+    </div>
+    <div class="pl-wl pl-wl--s">
+      <img class="pl-wl__img" src="{{ 'pl-water-s.svg' | asset_url }}" alt="" loading="eager" width="1800" height="1100">
+    </div>
+  </div>
+
+  {%- comment -%}
+    Decorative bubbles. The original hardcodes 16 <span> elements with
+    pre-rolled random-looking position/size/timing values baked directly
+    into the HTML at author time — this isn't merchant content or
+    data-driven, so it's reproduced as static markup rather than invented
+    via a Liquid loop of "random" numbers (Liquid has no RNG, and faking
+    one with modulo arithmetic would be less honest than just keeping the
+    designer's original values).
+  {%- endcomment -%}
+  <div class="pl-bub" aria-hidden="true">
+    <span style="--x:91.9%;--s:6.7px;--dur:21.5s;--dly:19.0s;--drift:-11px"></span>
+    <span style="--x:43.4%;--s:5.7px;--dur:26.8s;--dly:16.1s;--drift:-11px"></span>
+    <span style="--x:96.6%;--s:6.2px;--dur:13.7s;--dly:10.3s;--drift:38px"></span>
+    <span style="--x:6.0%;--s:3.6px;--dur:24.4s;--dly:10.6s;--drift:3px"></span>
+    <span style="--x:70.3%;--s:3.3px;--dur:20.9s;--dly:9.2s;--drift:-39px"></span>
+    <span style="--x:67.7%;--s:4.0px;--dur:27.0s;--dly:16.5s;--drift:-5px"></span>
+    <span style="--x:2.1%;--s:7.1px;--dur:22.0s;--dly:3.1s;--drift:-37px"></span>
+    <span style="--x:69.4%;--s:8.1px;--dur:21.9s;--dly:10.7s;--drift:-24px"></span>
+    <span style="--x:64.1%;--s:8.2px;--dur:17.3s;--dly:9.0s;--drift:2px"></span>
+    <span style="--x:21.8%;--s:7.1px;--dur:15.7s;--dly:18.4s;--drift:-13px"></span>
+    <span style="--x:61.9%;--s:6.6px;--dur:26.3s;--dly:7.2s;--drift:-23px"></span>
+    <span style="--x:45.9%;--s:8.9px;--dur:24.3s;--dly:7.2s;--drift:20px"></span>
+    <span style="--x:52.5%;--s:3.3px;--dur:20.2s;--dly:19.6s;--drift:-31px"></span>
+    <span style="--x:11.1%;--s:7.9px;--dur:20.4s;--dly:10.8s;--drift:-40px"></span>
+    <span style="--x:7.6%;--s:6.4px;--dur:19.5s;--dly:0.2s;--drift:-26px"></span>
+    <span style="--x:18.6%;--s:9.0px;--dur:24.5s;--dly:8.7s;--drift:13px"></span>
+  </div>
+
+  <div class="pl-vignette"></div>
+</pl-scenes>
